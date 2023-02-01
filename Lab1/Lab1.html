@@ -46,10 +46,10 @@
         </div>
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
-            <li class="active"><a href="#">Home</a></li>
-            <li><a href="#intro">Introduction</a></li>
+<!--            <li class="index.html"><a href="#">Home</a></li>-->
+<!--            <li><a href="#intro">Introduction</a></li>-->
 <!--            <li><a href="#obj">Project Objective</a></li>-->
-            <li><a href="#design">Procedure and Result</a></li>
+<!--            <li><a href="#design">Procedure and Result</a></li>-->
 <!--            <li><a href="#drawings">Drawings</a></li>-->
 <!--            <li><a href="#testing">Testing</a></li>-->
 <!--            <li><a href="#result">Result</a></li>-->
@@ -62,6 +62,7 @@
 
       <div class="starter-template">
         <h1>Lab 1: The Artemis board</h1>
+        <h4>Zhiyuan Zhang</h4>
 
 
       </div>
@@ -104,21 +105,27 @@
 
 
           <h3>2. Blinked it up</h3>
-             <p style="text-align: left;padding: 0px 30px;">The first code we'll run is called Example2_Serial. When this code is executed, the blue LED on the Artemis Nano will flash on and off in a pattern. It will turn on for one second, then turn off for one second, and repeat this sequence continuously. The outcome of running this code is demonstrated in the accompanying video.</p>
-
+             <p style="text-align: left;padding: 0px 30px;">The first code we'll run is called Example Blink it up. When this code is executed, the blue LED on the Artemis Nano will flash on and off in a pattern. It will turn on for one second, then turn off for one second, and repeat this sequence continuously. The outcome of running this code is demonstrated in the accompanying video.</p>
+          <iframe width="560" height="315" src="https://www.youtube.com/embed/DtC2NZjtuWg" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
           <h3>3. Serial</h3>
-             <p style="text-align: left;padding: 0px 30px;"> </p>
-
+             <p style="text-align: left;padding: 0px 30px;"> The Second code we run is the Example2_ serial. The second code we execute is Example2_ serial. We evaluate the board's serial port by sending a message to the board via the serial port and observing the board repeat the message back through the same port. The result is demonstrated in the video below</p>
+          <iframe width="560" height="315" src="https://www.youtube.com/embed/B3HyMjbFWFA?controls=0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
           <h3>4. AnalogRead</h3>
-             <p style="text-align: left;padding: 0px 30px;"> </p>
-
+             <p style="text-align: left;padding: 0px 30px;">The third code we execute is Example4_AnalogRead. This code utilizes the temperature sensor on the board to measure temperature. By touching the chip or blowing on it, changes in temperature can be observed on the board. In our test, the temperature initially read around 33000 and increased to 34400 when a finger was placed on the chip, then dropped back to 33000 when the chip was blown on. The result is demonstrated in the video below: </p>
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/j7W5HnfBKVo?controls=0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 
           <h3>5. MicrophoneOutput</h3>
-             <p style="text-align: left;padding: 0px 30px;"> </p>
-
+             <p style="text-align: left;padding: 0px 30px;">The fourth code we utilize is Example1_MicrophoneOutput. This code allows us to observe changes in the highest frequency by whistling or speaking into the microphone. The changes can be viewed through the serial monitor. The demonstration of this task can be seen in the accompanying video. </p>
+          <iframe width="560" height="315" src="https://www.youtube.com/embed/Da2k51Lq0MQ?controls=0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 
           <h3>6. Additional tasks</h3>
-             <p style="text-align: left;padding: 0px 30px;"> </p>
+             <p style="text-align: left;padding: 0px 30px;">To detect the frequency of a musical note and control an LED based on the result, the first step is to determine the frequency of "A" note, which is 440Hz. Then, we can add a simple if-else statement in the Microphone example code to turn the LED on or off based on the detected frequency. The condition for detecting the "A" note frequency is if the loudest frequency is between 430Hz and 445Hz. If the detected frequency is outside of this range, the LED will be turned off. </p>
+        <p style="text-align: left;padding: 0px 30px;">The code snippet is shown below:</p>
+        <img src="pics/code.jpg" width="641">
+        <p style="text-align: left;padding: 0px 30px;">The demonstration of the results can be found in the video:</p>
+        <iframe width="560" height="315" src="https://www.youtube.com/embed/i3ExxR2pinU?controls=0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
+
 
       </div>
 
@@ -192,10 +199,222 @@
       <div class="row">
               <h2>Code Appendix</h2>
               <pre><code>
-// Hello World.c
-int main(){
-  printf("Hello World.\n");
+/* Author: Nathan Seidle
+  Created: July 24, 2019
+
+  This example demonstrates how to use the pulse density microphone (PDM) on Artemis boards.
+  This library and example are heavily based on the Apollo3 pdm_fft example.
+*/
+
+/*
+// This file is subject to the terms and conditions defined in
+// file 'LICENSE.md', which is part of this source code package.
+*/
+
+//Global variables needed for PDM library
+#define pdmDataBufferSize 4096 //Default is array of 4096 * 32bit
+uint16_t pdmDataBuffer[pdmDataBufferSize];
+
+//Global variables needed for the FFT in this sketch
+float g_fPDMTimeDomain[pdmDataBufferSize * 2];
+float g_fPDMFrequencyDomain[pdmDataBufferSize * 2];
+float g_fPDMMagnitudes[pdmDataBufferSize * 2];
+uint32_t sampleFreq;
+
+//Enable these defines for additional debug printing
+#define PRINT_PDM_DATA 0
+#define PRINT_FFT_DATA 0
+
+#include <PDM.h> //Include PDM library included with the Aruino_Apollo3 core
+AP3_PDM myPDM;   //Create instance of PDM class
+
+//Math library needed for FFT
+#include <arm_math.h>
+
+void setup()
+{
+  Serial.begin(115200);
+  Serial.println("SparkFun PDM Example");
+
+  if (myPDM.begin() == false) // Turn on PDM with default settings, start interrupts
+  {
+    Serial.println("PDM Init failed. Are you sure these pins are PDM capable?");
+    while (1)
+      ;
+  }
+  Serial.println("PDM Initialized");
+
+  printPDMConfig();
 }
+
+void loop()
+{
+  if (myPDM.available())
+  {
+    myPDM.getData(pdmDataBuffer, pdmDataBufferSize);
+
+    printLoudest();
+  }
+
+  // Go to Deep Sleep until the PDM ISR or other ISR wakes us.
+  am_hal_sysctrl_sleep(AM_HAL_SYSCTRL_SLEEP_DEEP);
+}
+
+//*****************************************************************************
+//
+// Analyze and print frequency data.
+//
+//*****************************************************************************
+void printLoudest(void)
+{
+  float fMaxValue;
+  uint32_t ui32MaxIndex;
+  int16_t *pi16PDMData = (int16_t *)pdmDataBuffer;
+  uint32_t ui32LoudestFrequency;
+
+  //
+  // Convert the PDM samples to floats, and arrange them in the format
+  // required by the FFT function.
+  //
+  for (uint32_t i = 0; i < pdmDataBufferSize; i++)
+  {
+    if (PRINT_PDM_DATA)
+    {
+      Serial.printf("%d\n", pi16PDMData[i]);
+    }
+
+    g_fPDMTimeDomain[2 * i] = pi16PDMData[i] / 1.0;
+    g_fPDMTimeDomain[2 * i + 1] = 0.0;
+  }
+
+  if (PRINT_PDM_DATA)
+  {
+    Serial.printf("END\n");
+  }
+
+  //
+  // Perform the FFT.
+  //
+  arm_cfft_radix4_instance_f32 S;
+  arm_cfft_radix4_init_f32(&S, pdmDataBufferSize, 0, 1);
+  arm_cfft_radix4_f32(&S, g_fPDMTimeDomain);
+  arm_cmplx_mag_f32(g_fPDMTimeDomain, g_fPDMMagnitudes, pdmDataBufferSize);
+
+  if (PRINT_FFT_DATA)
+  {
+    for (uint32_t i = 0; i < pdmDataBufferSize / 2; i++)
+    {
+      Serial.printf("%f\n", g_fPDMMagnitudes[i]);
+    }
+
+    Serial.printf("END\n");
+  }
+
+  //
+  // Find the frequency bin with the largest magnitude.
+  //
+  arm_max_f32(g_fPDMMagnitudes, pdmDataBufferSize / 2, &fMaxValue, &ui32MaxIndex);
+
+  ui32LoudestFrequency = (sampleFreq * ui32MaxIndex) / pdmDataBufferSize;
+
+  if (PRINT_FFT_DATA)
+  {
+    Serial.printf("Loudest frequency bin: %d\n", ui32MaxIndex);
+  }
+
+  Serial.printf("Loudest frequency: %d         \n", ui32LoudestFrequency);
+
+
+       // turn the LED on (HIGH is the voltage level)
+
+  if (ui32LoudestFrequency>430 && ui32LoudestFrequency<445 )
+  {
+     digitalWrite(LED_BUILTIN, HIGH);
+  }else{
+    digitalWrite(LED_BUILTIN, LOW);
+  }
+
+
+}
+
+//*****************************************************************************
+//
+// Print PDM configuration data.
+//
+//*****************************************************************************
+void printPDMConfig(void)
+{
+  uint32_t PDMClk;
+  uint32_t MClkDiv;
+  float frequencyUnits;
+
+  //
+  // Read the config structure to figure out what our internal clock is set
+  // to.
+  //
+  switch (myPDM.getClockDivider())
+  {
+  case AM_HAL_PDM_MCLKDIV_4:
+    MClkDiv = 4;
+    break;
+  case AM_HAL_PDM_MCLKDIV_3:
+    MClkDiv = 3;
+    break;
+  case AM_HAL_PDM_MCLKDIV_2:
+    MClkDiv = 2;
+    break;
+  case AM_HAL_PDM_MCLKDIV_1:
+    MClkDiv = 1;
+    break;
+
+  default:
+    MClkDiv = 0;
+  }
+
+  switch (myPDM.getClockSpeed())
+  {
+  case AM_HAL_PDM_CLK_12MHZ:
+    PDMClk = 12000000;
+    break;
+  case AM_HAL_PDM_CLK_6MHZ:
+    PDMClk = 6000000;
+    break;
+  case AM_HAL_PDM_CLK_3MHZ:
+    PDMClk = 3000000;
+    break;
+  case AM_HAL_PDM_CLK_1_5MHZ:
+    PDMClk = 1500000;
+    break;
+  case AM_HAL_PDM_CLK_750KHZ:
+    PDMClk = 750000;
+    break;
+  case AM_HAL_PDM_CLK_375KHZ:
+    PDMClk = 375000;
+    break;
+  case AM_HAL_PDM_CLK_187KHZ:
+    PDMClk = 187000;
+    break;
+
+  default:
+    PDMClk = 0;
+  }
+
+  //
+  // Record the effective sample frequency. We'll need it later to print the
+  // loudest frequency from the sample.
+  //
+  sampleFreq = (PDMClk / (MClkDiv * 2 * myPDM.getDecimationRate()));
+
+  frequencyUnits = (float)sampleFreq / (float)pdmDataBufferSize;
+
+  Serial.printf("Settings:\n");
+  Serial.printf("PDM Clock (Hz):         %12d\n", PDMClk);
+  Serial.printf("Decimation Rate:        %12d\n", myPDM.getDecimationRate());
+  Serial.printf("Effective Sample Freq.: %12d\n", sampleFreq);
+  Serial.printf("FFT Length:             %12d\n\n", pdmDataBufferSize);
+  Serial.printf("FFT Resolution: %15.3f Hz\n", frequencyUnits);
+}
+
               </code></pre>
       </div>
 
