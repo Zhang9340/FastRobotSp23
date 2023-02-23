@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="Lab4" content="">
+    <meta name="Zhiyuan" content="">
+
+    <title>Starter Template for Bootstrap</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <!-- <link href="../../assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet"> -->
+
+    <!-- Custom styles for this template -->
+    <link href="starter-template.css" rel="stylesheet">
+
+    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+    <!--[if lt IE 9]>
+    <script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+    <!-- <script src="../../assets/js/ie-emulation-modes-warning.js"></script> -->
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                    aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">Lab4</a>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+            <ul class="nav navbar-nav">
+                <!--            <li class="index.html"><a href="#">Home</a></li>-->
+                <!--            <li><a href="#intro">Introduction</a></li>-->
+                <!--            <li><a href="#obj">Project Objective</a></li>-->
+                <!--            <li><a href="#design">Procedure and Result</a></li>-->
+                <!--            <li><a href="#drawings">Drawings</a></li>-->
+                <!--            <li><a href="#testing">Testing</a></li>-->
+                <!--            <li><a href="#result">Result</a></li>-->
+            </ul>
+        </div><!--/.nav-collapse -->
+    </div>
+</nav>
+
+<div class="container">
+
+    <div class="starter-template">
+        <h1>Lab 4: IMU</h1>
+        <h4>Zhiyuan Zhang</h4>
+
+
+    </div>
+
+    <!--      <hr>-->
+    <!--      <div class="center-block">-->
+    <!--          <iframe width="640" height="360" src="https://www.youtube.com/embed/dQw4w9WgXcQ" frameborder="0" allowfullscreen></iframe>-->
+    <!--          <h4 style="text-align:center;">Demonstration Video</h4>-->
+    <!--      </div>-->
+
+    <hr id="intro">
+
+    <div style="text-align:center;">
+        <h2>Introduction</h2>
+        <p style="text-align: left;padding: 0px 30px;"> The aim of this laboratory activity is to integrate an IMU
+            (Inertial Measurement Unit) to the robot, operate the Artemis microcontroller and sensors using a battery
+            as a power source, and capture a stunt performed by remote-controlled robot. </p>
+
+        <hr id='obj'>
+
+        <!--      <div class="row">-->
+        <!--          <div class="col-md-4" style="text-align:center;">-->
+        <!--          <img class="img-rounded" src="pics/1.jpg" alt="Generic placeholder image" width="240" height="240">-->
+        <!--          </div>-->
+        <!--          <div class="col-md-8" style="font-size:18px;">-->
+        <!--          <h2>Project Objective:</h2>-->
+        <!--          <ul>-->
+        <!--              <li>some important objectives.some important objectives.some important objectives.some important objectives.</li>-->
+        <!--                <li>some other important objectives.</li>-->
+        <!--            <li>some not-that-important objectives.</li>-->
+        <!--          </ul>-->
+        <!--          </div>-->
+        <!--      </div>-->
+
+        <!--    <hr id='design'>-->
+
+        <div style="text-align:center;">
+            <h2>Lab Procedure And Result</h2>
+            <h3>1. Setup the IMU</h3>
+            <p style="text-align: left;padding: 0px 30px;">
+                a) The connection fo the IMU is shown in the figure below:
+            </p>
+            <img src="pics/connection.jpg" width="400">
+            <p style="text-align: left;padding: 0px 30px;">
+                The result of running the demo code is shown below:
+
+            </p>
+            <img src="pics/setup.jpg" width="700">
+
+
+            <p style="text-align: left;padding: 0px 30px;">
+                It has been observed that in the provided code example, the AD0_VAL pin has a default value of 1. The
+                code's comment suggests that this value can be changed to 0 by closing the ADR jumper.
+
+                <br>The IMU board's datasheet indicates that the ICM-20948's slave address is b110100X, which is a 7-bit
+                address. The least significant bit (LSB) of the 7-bit address is determined by the logic level on the
+                AD0 pin. This feature enables two ICM-20948s to be connected to the same I2C bus simultaneously. When
+                using this configuration, one device's address should be b1101000 (AD0 pin is logic low), and the
+                other's address should be b1101001 (AD0 pin is logic high).
+            </p>
+
+            <p style="text-align: left;padding: 0px 30px;">
+                <br> b) I included some programming code to make the LED on the Artemis microcontroller blink when the
+                IMU is
+                connected and initialized(In the setup() function). This action serves as a visual cue to indicate that
+                the connection has been
+                established successfully.
+            </p>
+            <img src="pics/blink.jpg" width="700">
+
+            <h3>2. Accelerometer </h3>
+            <h4> (a) Pitch and Roll</h4>
+            <p style="text-align: left;padding: 0px 30px;"> By using the equation from the lecture , we can calculate
+                the roll and pitch using the code below: </p>
+
+            <img src="pics/equation.jpg" width="400">
+            <p style="text-align: left;padding: 0px 30px;">The test for {90, 0, 90} for the roll and pitch is shown
+                below: </p>
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/RvrEVCRoUWc"
+                    title="YouTube video player" frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowfullscreen></iframe>
+
+
+            <p style="text-align: left;padding: 0px 30px;">
+                During the testing, I find that the measurement is accurate with an error of 2.2% ,even though there is
+                small noise affecting
+                the reading. Therefore , two-point calibration is not necessary.
+            </p>
+
+            <h4> (b) Frequency Spectrum Analysis </h4>
+            <p style="text-align: left;padding: 0px 30px;">
+                To analysis the noise, I record about 200 pitch and roll data point,and do the fft for the pitch and row
+                data,The result is shown below:
+            </p>
+            <img src="pics/rollpitchbybluetooth.jpg" width="500">
+
+            <img src="pics/pitchfft.jpg" width="600">
+            <img src="pics/rowfft.jpg" width="500">
+            <p style="text-align: left;padding: 0px 30px;">
+                As shown in the frequency domain, There is only one significant spike at 0Hz, showning that the noise of
+                the IMU is negligible.Based on the information provided in the IMU's datasheet, it is likely that there
+                is a
+                low-pass filter implemented in the accelerometer that operates within a frequency range of 5.7 Hz to 246
+                Hz. This filter helps to prevent any external noise or interference from affecting the accuracy of the
+                accelerometer's collected data. Therefore, there is no need to be concerned about ambient noise
+                potentially impacting the data's reliability.
+            </p>
+
+
+            <h3>Gyroscope</h3>
+            <h4>(a) compute pitch, roll, and yaw angles</h4>
+            <p style="text-align: left;padding: 0px 30px;">
+                The code used to get the pitch , roll and yaw from the gyroscope is shown below:
+            </p>
+            <img src="pics/gyrocode1.jpg" width="400">
+            <p style="text-align: left;padding: 0px 30px;"> To test the reading, I placed the IMU to the pitch angle 90
+                degree， here is the result:</p>
+            <img src="pics/gyro-roll-pitch-yaw.jpg" width="400">
+            <p style="text-align: left;padding: 0px 30px;">we can see the pitch reading from the gyroscope is 156.58
+                degree, but the true pitch is 90 degree, there is a huge drift in this reading </p>
+            <h4>(b) sampling frequency </h4>
+            <p style="text-align: left;padding: 0px 30px;"> I modified the sampling frequency by adding a delay function
+                in the while loop. I test the results of the delay(10),delay(50) and delay(100) when the IMU was palced
+                on the flat desk, The result is shown
+                below:</p>
+            <p style="text-align: left;padding: 0px 30px;">The delay(10):</p>
+            <img src="pics/gryodelay10.jpg" width="400">
+            <p style="text-align: left;padding: 0px 30px;">The delay(50):</p>
+            <img src="pics/gryodelay100.jpg" width="400">
+            <p style="text-align: left;padding: 0px 30px;">The delay(100):</p>
+            <img src="pics/gryodelay50.jpg" width="400">
+            <p style="text-align: left;padding: 0px 30px;">As shown in the result , when sampling frequency is lower
+                (more delay in the loop), the drift is lower. </p>
+            <h4>(c) complimentary filter </h4>
+            <p style="text-align: left;padding: 0px 30px;"> The formula for the complimentary filter is shown
+                below: </p>
+            <img src="pics/complimentary.jpg" width="400">
+
+
+            <p style="text-align: left;padding: 0px 30px;">
+                The variable alpha is a weight factor. When alpha is set to 1, the resulting theta will match the
+                accelerometer results. If alpha is 0, theta will remain the same as the gyroscope results. If alpha is
+                between 0 and 1, theta will be a combination of both gyroscope and accelerometer readings.
+
+                This filter is designed to complement the gyroscope measurements, so the gyroscope readings should carry
+                more weight. Therefore, alpha should ideally be less than 0.5. Additionally, gyroscope readings are more
+                reliable than accelerometer readings when it comes to sudden movements. After some testing, it was found
+                that setting alpha to 0.3 effectively counteracts drift when combined with a small amount of
+                accelerometer data. The working range is -180 to 180 , the video below show that it is not susceptible
+                to
+                drift or quick vibrations
+            </p>
+
+            <p style="text-align: left;padding: 0px 30px;">The result of running the measure distance with two sensor
+                shown in
+                the video below: </p>
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/-OljHPhbT4w"
+                    title="YouTube video player" frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowfullscreen></iframe>
+
+
+            <h3>Sample data</h3>
+            <p style="text-align: left;padding: 0px 30px;">To get the data as fast as possible , I removed all the
+                serial print and store the tof and IMU data in the array first , then send it to the computer,The
+                code is shown below:</p>
+            <script src="https://gist.github.com/Zhang9340/6d64c6ea420d06e8ed4d7087b8b63e82.js"></script>
+            <p style="text-align: left;padding: 0px 30px;">The result of the sample data is shown in the video
+                below: </p>
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/NUyC_nc-njo"
+                    title="YouTube video player" frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowfullscreen></iframe>
+
+            <p style="text-align: left;padding: 0px 30px;">
+                An integer value takes up 2 bytes of memory while a floating-point number takes up 4 bytes. Therefore,
+                each sample consisting of 3 integers and 5 floating-point numbers will require 26 bytes of memory. If 10
+                samples are taken per second, this will result in 260 bytes of data per second. Given that the Artemis
+                has 384 kB of RAM, the device can support 1512 seconds of continuous sampling if all the available
+                memory is used for the data arrays.
+            </p>
+            <h3>Cut the Coord</h3>
+            <p style="text-align: left;padding: 0px 30px;">The motor in the car requires the most power, and is
+                therefore supported by a 3.7V 850mAh battery. On the other hand, the Artemis board and its peripheral
+                sensors utilize a 3.7V 650mAh battery, as they require less power compared to the motor.</p>
+            <img src="pics/coord.jpg" width="400">
+
+
+            <h3>Record a stunt</h3>
+            <p style="text-align: left;padding: 0px 30px;">
+                The video for the car without Artemis:
+            </p>
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/nB5qTMSSTB0"
+                    title="YouTube video player" frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowfullscreen></iframe>
+
+            <p style="text-align: left;padding: 0px 30px;">
+                This is the video that RC car with Artemis:
+
+
+            </p>
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/0BL8OQcMPPM"
+                    title="YouTube video player" frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowfullscreen></iframe>
+
+            <p style="text-align: left;padding: 0px 30px;">
+                The data collected for a stunt is shown below:
+            </p>
+            <img src="pics/gyroresult.jpg" width="400">
+            <img src="pics/tofresult.jpg" width="400">
+            <img src="pics/accresult.jpg" width="400">
+
+        </div>
+
+
+        <!--    <hr id='drawings'>-->
+
+        <!--      <div style="text-align:center;">-->
+        <!--              <h2>Drawings</h2>-->
+        <!--              <p style="text-align: left;padding: 0px 30px;">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum lorem nulla, consectetur at leo vel, pretium bibendum nisl. Cras blandit quam a enim ultrices, eu convallis enim posuere. Donec eleifend enim sed purus consectetur, vitae cursus lectus varius. Vivamus consectetur felis nec est venenatis posuere. Phasellus vitae aliquet erat. In laoreet lacinia mollis. Quisque iaculis nisl fermentum pharetra lobortis. Donec rhoncus dui sem, ac molestie leo tristique vel. Phasellus in nibh feugiat, fringilla lectus in, elementum magna. Etiam quis dui condimentum, tempus ex in, dapibus est. Cras ut congue augue. Donec ac enim ex. Ut id tristique risus, vel porttitor quam. Sed ultricies enim eu nibh porttitor, vel sodales enim feugiat. Fusce volutpat venenatis magna ac ultrices. Curabitur eget urna ut nulla mattis convallis non eu diam.</p>-->
+        <!--      </div>-->
+
+        <!--    <hr id='testing'>-->
+
+        <!--      <div style="text-align:center;">-->
+        <!--              <h2>Testing</h2>-->
+        <!--              <p style="text-align: left;padding: 0px 30px;">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum lorem nulla, consectetur at leo vel, pretium bibendum nisl. Cras blandit quam a enim ultrices, eu convallis enim posuere. Donec eleifend enim sed purus consectetur, vitae cursus lectus varius. Vivamus consectetur felis nec est venenatis posuere. Phasellus vitae aliquet erat. In laoreet lacinia mollis. Quisque iaculis nisl fermentum pharetra lobortis. Donec rhoncus dui sem, ac molestie leo tristique vel. Phasellus in nibh feugiat, fringilla lectus in, elementum magna. Etiam quis dui condimentum, tempus ex in, dapibus est. Cras ut congue augue. Donec ac enim ex. Ut id tristique risus, vel porttitor quam. Sed ultricies enim eu nibh porttitor, vel sodales enim feugiat. Fusce volutpat venenatis magna ac ultrices. Curabitur eget urna ut nulla mattis convallis non eu diam.</p>-->
+        <!--      </div>-->
+
+        <!--    <hr id='result'>-->
+
+        <!--      <div style="text-align:center;">-->
+        <!--              <h2>Result</h2>-->
+        <!--              <p style="text-align: left;padding: 0px 30px;">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum lorem nulla, consectetur at leo vel, pretium bibendum nisl. Cras blandit quam a enim ultrices, eu convallis enim posuere. Donec eleifend enim sed purus consectetur, vitae cursus lectus varius. Vivamus consectetur felis nec est venenatis posuere. Phasellus vitae aliquet erat. In laoreet lacinia mollis. Quisque iaculis nisl fermentum pharetra lobortis. Donec rhoncus dui sem, ac molestie leo tristique vel. Phasellus in nibh feugiat, fringilla lectus in, elementum magna. Etiam quis dui condimentum, tempus ex in, dapibus est. Cras ut congue augue. Donec ac enim ex. Ut id tristique risus, vel porttitor quam. Sed ultricies enim eu nibh porttitor, vel sodales enim feugiat. Fusce volutpat venenatis magna ac ultrices. Curabitur eget urna ut nulla mattis convallis non eu diam.</p>-->
+        <!--      </div>-->
+
+        <!--    <hr>-->
+
+        <!--    <div class="row" style="text-align:center;">-->
+        <!--          <h2>Work Distribution</h2>-->
+        <!--          <div style="text-align:center;">-->
+        <!--              <img class="img-rounded" src="pics/group.jpg" alt="Generic placeholder image" style="width:80%;">-->
+        <!--              <h4>Project group picture</h4>-->
+        <!--          </div>-->
+        <!--          <div class="col-md-6" style="font-size:16px">-->
+        <!--              <img class="img-rounded" src="pics/a.png" alt="Generic placeholder image" width="240" height="240">-->
+        <!--              <h3>Rick</h3>-->
+        <!--              <p class="lead">netid@cornell.edu</p>-->
+        <!--              <p>Designed the overall software architecture (Just being himself).-->
+        <!--          </div>-->
+        <!--          <div class="col-md-6" style="font-size:16px">-->
+        <!--              <img class="img-rounded" src="pics/b.png" alt="Generic placeholder image" width="240" height="240">-->
+        <!--              <h3>Morty</h3>-->
+        <!--              <p class="lead">netid@cornell.edu</p>-->
+        <!--              <p>Tested the overall system.-->
+        <!--          </div>-->
+        <!--      </div>-->
+
+        <!--    <hr>-->
+        <!--      <div style="font-size:18px">-->
+        <!--          <h2>Parts List</h2>-->
+        <!--          <ul>-->
+        <!--              <li>1 x SparkFun RedBoard Artemis Nano</li>-->
+        <!--              <li>1 x USB C-to-C</li>-->
+
+        <!--              <li>  Arduino IDE and Sparkfun Appollo3</li>-->
+        <!--          </ul>-->
+
+        <!--      </div>-->
+        <!--      <hr>-->
+        <!--      <div style="font-size:18px">-->
+        <!--          <h2>References</h2>-->
+        <!--          <a href="https://picamera.readthedocs.io/">PiCamera Document</a><br>-->
+        <!--          <a href="http://www.micropik.com/PDF/SG90Servo.pdf">Tower Pro Servo Datasheet</a><br>-->
+        <!--          <a href="http://getbootstrap.com/">Bootstrap</a><br>-->
+        <!--          <a href="http://abyz.co.uk/rpi/pigpio/">Pigpio Library</a><br>-->
+        <!--          <a href="https://sourceforge.net/p/raspberry-gpio-python/wiki/Home/">R-Pi GPIO Document</a><br>-->
+
+        <!--      </div>-->
+
+        <!--&lt;!&ndash;    <hr>&ndash;&gt;-->
+
+        <!--      <div class="row">-->
+        <!--              <h2>Code Appendix</h2>-->
+        <!--              <pre><code>-->
+        <!--/* Author: Nathan Seidle-->
+        <!--  Created: July 24, 2019-->
+
+        <!--  This example demonstrates how to use the pulse density microphone (PDM) on Artemis boards.-->
+        <!--  This library and example are heavily based on the Apollo3 pdm_fft example.-->
+        <!--*/-->
+
+        <!--/*-->
+        <!--// This file is subject to the terms and conditions defined in-->
+        <!--// file 'LICENSE.md', which is part of this source code package.-->
+        <!--*/-->
+
+        <!--//Global variables needed for PDM library-->
+        <!--#define pdmDataBufferSize 4096 //Default is array of 4096 * 32bit-->
+        <!--uint16_t pdmDataBuffer[pdmDataBufferSize];-->
+
+        <!--//Global variables needed for the FFT in this sketch-->
+        <!--float g_fPDMTimeDomain[pdmDataBufferSize * 2];-->
+        <!--float g_fPDMFrequencyDomain[pdmDataBufferSize * 2];-->
+        <!--float g_fPDMMagnitudes[pdmDataBufferSize * 2];-->
+        <!--uint32_t sampleFreq;-->
+
+        <!--//Enable these defines for additional debug printing-->
+        <!--#define PRINT_PDM_DATA 0-->
+        <!--#define PRINT_FFT_DATA 0-->
+
+        <!--#include <PDM.h> //Include PDM library included with the Aruino_Apollo3 core-->
+        <!--AP3_PDM myPDM;   //Create instance of PDM class-->
+
+        <!--//Math library needed for FFT-->
+        <!--#include <arm_math.h>-->
+
+        <!--void setup()-->
+        <!--{-->
+        <!--  Serial.begin(115200);-->
+        <!--  Serial.println("SparkFun PDM Example");-->
+
+        <!--  if (myPDM.begin() == false) // Turn on PDM with default settings, start interrupts-->
+        <!--  {-->
+        <!--    Serial.println("PDM Init failed. Are you sure these pins are PDM capable?");-->
+        <!--    while (1)-->
+        <!--      ;-->
+        <!--  }-->
+        <!--  Serial.println("PDM Initialized");-->
+
+        <!--  printPDMConfig();-->
+        <!--}-->
+
+        <!--void loop()-->
+        <!--{-->
+        <!--  if (myPDM.available())-->
+        <!--  {-->
+        <!--    myPDM.getData(pdmDataBuffer, pdmDataBufferSize);-->
+
+        <!--    printLoudest();-->
+        <!--  }-->
+
+        <!--  // Go to Deep Sleep until the PDM ISR or other ISR wakes us.-->
+        <!--  am_hal_sysctrl_sleep(AM_HAL_SYSCTRL_SLEEP_DEEP);-->
+        <!--}-->
+
+        <!--//*****************************************************************************-->
+        <!--//-->
+        <!--// Analyze and print frequency data.-->
+        <!--//-->
+        <!--//*****************************************************************************-->
+        <!--void printLoudest(void)-->
+        <!--{-->
+        <!--  float fMaxValue;-->
+        <!--  uint32_t ui32MaxIndex;-->
+        <!--  int16_t *pi16PDMData = (int16_t *)pdmDataBuffer;-->
+        <!--  uint32_t ui32LoudestFrequency;-->
+
+        <!--  //-->
+        <!--  // Convert the PDM samples to floats, and arrange them in the format-->
+        <!--  // required by the FFT function.-->
+        <!--  //-->
+        <!--  for (uint32_t i = 0; i < pdmDataBufferSize; i++)-->
+        <!--  {-->
+        <!--    if (PRINT_PDM_DATA)-->
+        <!--    {-->
+        <!--      Serial.printf("%d\n", pi16PDMData[i]);-->
+        <!--    }-->
+
+        <!--    g_fPDMTimeDomain[2 * i] = pi16PDMData[i] / 1.0;-->
+        <!--    g_fPDMTimeDomain[2 * i + 1] = 0.0;-->
+        <!--  }-->
+
+        <!--  if (PRINT_PDM_DATA)-->
+        <!--  {-->
+        <!--    Serial.printf("END\n");-->
+        <!--  }-->
+
+        <!--  //-->
+        <!--  // Perform the FFT.-->
+        <!--  //-->
+        <!--  arm_cfft_radix4_instance_f32 S;-->
+        <!--  arm_cfft_radix4_init_f32(&S, pdmDataBufferSize, 0, 1);-->
+        <!--  arm_cfft_radix4_f32(&S, g_fPDMTimeDomain);-->
+        <!--  arm_cmplx_mag_f32(g_fPDMTimeDomain, g_fPDMMagnitudes, pdmDataBufferSize);-->
+
+        <!--  if (PRINT_FFT_DATA)-->
+        <!--  {-->
+        <!--    for (uint32_t i = 0; i < pdmDataBufferSize / 2; i++)-->
+        <!--    {-->
+        <!--      Serial.printf("%f\n", g_fPDMMagnitudes[i]);-->
+        <!--    }-->
+
+        <!--    Serial.printf("END\n");-->
+        <!--  }-->
+
+        <!--  //-->
+        <!--  // Find the frequency bin with the largest magnitude.-->
+        <!--  //-->
+        <!--  arm_max_f32(g_fPDMMagnitudes, pdmDataBufferSize / 2, &fMaxValue, &ui32MaxIndex);-->
+
+        <!--  ui32LoudestFrequency = (sampleFreq * ui32MaxIndex) / pdmDataBufferSize;-->
+
+        <!--  if (PRINT_FFT_DATA)-->
+        <!--  {-->
+        <!--    Serial.printf("Loudest frequency bin: %d\n", ui32MaxIndex);-->
+        <!--  }-->
+
+        <!--  Serial.printf("Loudest frequency: %d         \n", ui32LoudestFrequency);-->
+
+
+        <!--       // turn the LED on (HIGH is the voltage level)-->
+
+        <!--  if (ui32LoudestFrequency>430 && ui32LoudestFrequency<445 )-->
+        <!--  {-->
+        <!--     digitalWrite(LED_BUILTIN, HIGH);-->
+        <!--  }else{-->
+        <!--    digitalWrite(LED_BUILTIN, LOW);-->
+        <!--  }-->
+
+
+        <!--}-->
+
+        <!--//*****************************************************************************-->
+        <!--//-->
+        <!--// Print PDM configuration data.-->
+        <!--//-->
+        <!--//*****************************************************************************-->
+        <!--void printPDMConfig(void)-->
+        <!--{-->
+        <!--  uint32_t PDMClk;-->
+        <!--  uint32_t MClkDiv;-->
+        <!--  float frequencyUnits;-->
+
+        <!--  //-->
+        <!--  // Read the config structure to figure out what our internal clock is set-->
+        <!--  // to.-->
+        <!--  //-->
+        <!--  switch (myPDM.getClockDivider())-->
+        <!--  {-->
+        <!--  case AM_HAL_PDM_MCLKDIV_4:-->
+        <!--    MClkDiv = 4;-->
+        <!--    break;-->
+        <!--  case AM_HAL_PDM_MCLKDIV_3:-->
+        <!--    MClkDiv = 3;-->
+        <!--    break;-->
+        <!--  case AM_HAL_PDM_MCLKDIV_2:-->
+        <!--    MClkDiv = 2;-->
+        <!--    break;-->
+        <!--  case AM_HAL_PDM_MCLKDIV_1:-->
+        <!--    MClkDiv = 1;-->
+        <!--    break;-->
+
+        <!--  default:-->
+        <!--    MClkDiv = 0;-->
+        <!--  }-->
+
+        <!--  switch (myPDM.getClockSpeed())-->
+        <!--  {-->
+        <!--  case AM_HAL_PDM_CLK_12MHZ:-->
+        <!--    PDMClk = 12000000;-->
+        <!--    break;-->
+        <!--  case AM_HAL_PDM_CLK_6MHZ:-->
+        <!--    PDMClk = 6000000;-->
+        <!--    break;-->
+        <!--  case AM_HAL_PDM_CLK_3MHZ:-->
+        <!--    PDMClk = 3000000;-->
+        <!--    break;-->
+        <!--  case AM_HAL_PDM_CLK_1_5MHZ:-->
+        <!--    PDMClk = 1500000;-->
+        <!--    break;-->
+        <!--  case AM_HAL_PDM_CLK_750KHZ:-->
+        <!--    PDMClk = 750000;-->
+        <!--    break;-->
+        <!--  case AM_HAL_PDM_CLK_375KHZ:-->
+        <!--    PDMClk = 375000;-->
+        <!--    break;-->
+        <!--  case AM_HAL_PDM_CLK_187KHZ:-->
+        <!--    PDMClk = 187000;-->
+        <!--    break;-->
+
+        <!--  default:-->
+        <!--    PDMClk = 0;-->
+        <!--  }-->
+
+        <!--  //-->
+        <!--  // Record the effective sample frequency. We'll need it later to print the-->
+        <!--  // loudest frequency from the sample.-->
+        <!--  //-->
+        <!--  sampleFreq = (PDMClk / (MClkDiv * 2 * myPDM.getDecimationRate()));-->
+
+        <!--  frequencyUnits = (float)sampleFreq / (float)pdmDataBufferSize;-->
+
+        <!--  Serial.printf("Settings:\n");-->
+        <!--  Serial.printf("PDM Clock (Hz):         %12d\n", PDMClk);-->
+        <!--  Serial.printf("Decimation Rate:        %12d\n", myPDM.getDecimationRate());-->
+        <!--  Serial.printf("Effective Sample Freq.: %12d\n", sampleFreq);-->
+        <!--  Serial.printf("FFT Length:             %12d\n\n", pdmDataBufferSize);-->
+        <!--  Serial.printf("FFT Resolution: %15.3f Hz\n", frequencyUnits);-->
+        <!--}-->
+        <!--              </code></pre>-->
+    </div>
+
+</div><!-- /.container -->
+
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
+<script src="dist/js/bootstrap.min.js"></script>
+<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+<!-- <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script> -->
+</body>
+</html>
