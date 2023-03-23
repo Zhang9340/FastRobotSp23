@@ -109,116 +109,89 @@
                 To send command to the robot over bluetooth , I wrote a new case that start the robot by changing the
                 flag to true,so that in the while main loop it will execute the PID control when the flag is ture.And to
                 get the PID data, distance and time data from the robot.I also write a handler to retrieve the data from
-                robot. In this way we can In th The code snippet for the computer end is shown below:
+                robot. In this way we can tune our PID control based on the PID data plot . The code snippet for the
+                computer end is shown below:
                 <script src="https://gist.github.com/Zhang9340/c82644693c1018b9532f7d34869deaaa.js"></script>
-            </p>
-            <img src="pics/prelab.jpg" width="400">
-            <p style="text-align: left;padding: 0px 30px;">
-                As the Artemis necessitates significantly less current to operate than the motors, two distinct
-                batteries were utilized to power each component. To elaborate, the motors that consume more power are
-                powered by a battery with a higher energy capacity of 3.7V and 850mAh. Conversely, the Artemis is
-                powered by a 3.7V and 650mAh battery due to its lower power requirements.
-
+                <script src="https://gist.github.com/Zhang9340/a6c52846d0daa5e25a24eb4eda2c948a.js"></script>
+                <script src="https://gist.github.com/Zhang9340/cbc1da21f3d9d000dea975b8cda6e638.js"></script>
             </p>
 
-
-            <h3>2.Single Dual Motor Driver</h3>
-
-            <p style="text-align: left;padding: 0px 30px;"> For one motor driver ,I connect the BIN1 and BIN2 to A0 and
-                A1 respectively ,using the power supply to power the motor driver. I then used the code below to
-                generate the PWM for the driver</p>
-            <img src="pics/code%20for%20one.jpg" width="400">
-            <p style="text-align: left;padding: 0px 30px;"> The voltage supply I set up is 3.7v ,and I measured the pwm
-                signal from the BOUT2 pin.The Setting and the result is shown below:</p>
-            <img src="pics/setting.jpg" width="400">
-            <img src="pics/result.jpg" width="400">
-            <h3>3.Spinning Wheels</h3>
-
-            <p style="text-align: left;padding: 0px 30px;">Once I confirmed the correctness of the connections and
-                outputs, I dismantled the car and connect the motor drivers as shown in the prelab connection diagram,
-                The code snippet I used is shown below: </p>
-            <img src="pics/oneside.png" width="400">
-            <p style="text-align: left;padding: 0px 30px;">The result is shown in the video
-                below: </p>
-            <iframe width="560" height="315" src="https://www.youtube.com/embed/rW0014C3y28"
-                    title="YouTube video player" frameborder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                    allowfullscreen></iframe>
-
-
-            <p style="text-align: left;padding: 0px 30px;">Similar to the one side motor spinning , I used the code
-                below to run the both side motors </p>
-            <img src="pics/doubleside.png" width="400">
-            <p style="text-align: left;padding: 0px 30px;">The video below shows powered by batteries, both sides of
-                wheels spin as the code defines. </p>
-            <iframe width="560" height="315" src="https://www.youtube.com/embed/ZauhI7qgcsc"
-                    title="YouTube video player" frameborder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                    allowfullscreen></iframe>
-
-            <p style="text-align: left;padding: 0px 30px;">Once I had verified that both motor drivers were functioning
-                correctly, I proceeded to incorporate the various components from previous labs, such as the IMU and ToF
-                sensors, into the car's system. The accompanying image illustrates the final configuration of these
-                components within the car. </p>
-            <img src="pics/finished.jpg" width="400">
-            <h3>3.Lower Limit PWM Values</h3>
-            <p style="text-align: left;padding: 0px 30px;"> After conducting numerous experiments, I discovered that to
-                enable my robot to move forward from a stationary position on the floor, the PWM must be
-                set to at least 40 . This value is necessary to provide the motors with enough power to initiate
-                movement. The vide is shown below:</p>
-            <iframe width="560" height="315" src="https://www.youtube.com/embed/HrM0-7QbXMk"
-                    title="YouTube video player" frameborder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                    allowfullscreen></iframe>
-
-            <p style="text-align: left;padding: 0px 30px;">To find minimum pwm for a turn, the pwm for the left is
-                50 and 30 for the right motor</p>
-            <h3> 4.Straight line Calibration</h3>
             <p style="text-align: left;padding: 0px 30px;">
-                As I set the right and left motors to the same pwm,I found that my robot goes towards the left.
-                Therefore
-                , I decreased the duty cycle of the right motor to 58% of the counterpart of the left motor, The code
-                below
-                is used to run a straight line.
+                The code that robot handle the command from the computer, The code snippet is shown below:
+                <script src="https://gist.github.com/Zhang9340/e2784e3f947f8e0e851b9cf47f371d06.js"></script>
+                <script src="https://gist.github.com/Zhang9340/b15916409d59f638b1e1c1c76ad9a6c6.js"></script>
+                <script src="https://gist.github.com/Zhang9340/fa46040c0beb03994a09561f4a68bb39.js"></script>
+
             </p>
-            <img src="pics/straight.png" width="400">
-            <iframe width="560" height="315" src="https://www.youtube.com/embed/gjjxzp_6IHk"
+
+
+            <h3>P/I/D discussion</h3>
+            <p style="text-align: left;padding: 0px 30px;"> During the lab task, I established a specific distance as
+                the target for implementing the PID control. The discrepancy between the measured distance and the
+                established distance was regarded as the error. The PID control primarily comprises three parameters:
+                Kp, Ki, and Kd. Kp is responsible for controlling the speed at which the steering turns while moving
+                towards the target point. Ki adds more steering action to improve stability, whereas Kd is employed to
+                damp oscillation. To choose the parameters, I initiated the testing process by
+                only setting Kp to 0.5 and then gradually decreasing it. When the car responded quickly and moved
+                towards the wall, I introduced Ki to decrease the overshoot and enhance control stability. Finally, I
+                added
+                Kd when the car began oscillating around the target point to minimize oscillation. The values for Kp,
+                Ki, and Kd were determined to be 0.3, 0.001, and 60, respectively. It is important to note that an
+                excessive integral can cause oscillation , which is why Ki is much smaller than Kp.</p>
+
+
+            <h3>Range/Sampling time discussion</h3>
+            <p style="text-align: left;padding: 0px 30px;">Since the TOF sensor has measurement error , so I set my
+                tolerance for the distance is 8mm. Therefore, form range 292 to 308 , the robot will stop.The sampling
+                time of TOF is fast enough for the PID contol process to update the new pwm for the motor </p>
+
+            <h3> 4.Lab task</h3>
+            <p style="text-align: left;padding: 0px 30px;">
+                In this lab,I chose the task A. I wrote a pid function that is called in the main loop() when the
+                computer send
+                start command ,the code for the pid is shown below:
+                <script src="https://gist.github.com/Zhang9340/831a6a44068f4f7d149f378ca368560c.js"></script>
+                The code begins by retrieving the distance from the TOF sensor through the use of the get_tof()
+                function. Once the distance is obtained, the code calculates the error. This error value is then fed as
+                an input into the PID control system, which generates the PWM value
+                for controlling the motor.
+            </p>
+            <p style="text-align: left;padding: 0px 30px;">
+                The video below shows the result when I only set the KP= 0.3 for the PID ,and we can see there is
+                oscillation:
+            </p>
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/S2af8Gs4t38"
                     title="YouTube video player" frameborder="0"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                     allowfullscreen></iframe>
 
-            <h3>5.Open loop</h3>
             <p style="text-align: left;padding: 0px 30px;">
-                Below is the code I employed to execute the open loop. Initially, the robot will move forward for a
-                duration of 2 seconds, followed by a 1-second halt. Subsequently, it will travel in reverse before
-                ultimately executing a turn. </p>
-            <img src="pics/openloop.png" width="400">
-            <p style="text-align: left;padding: 0px 30px;">
-                The result for open loop test is shown in the video below: </p>
-            <iframe width="560" height="315" src="https://www.youtube.com/embed/rU82eHCHM2g"
+                After setting the KI=0.001 and KD=60 , The PID can contorll the motor stop at 300mm form the wall:
+            </p>
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/-DhOQkIdf-Q"
                     title="YouTube video player" frameborder="0"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                     allowfullscreen></iframe>
-
-
-            <h3> 6.AnalogWrite frequency discussion</h3>
-            <img src="pics/result.jpg" width="400">
             <p style="text-align: left;padding: 0px 30px;">
-                As shown from the oscilloscope ,the frequency is 183.1 Hz .And from the data sheet,the frequency is
-                490Hz, In my opinion, the current PWM frequency is sufficient. However, increasing it could offer the
-                advantage of more precise control over the motor, resulting in a more rapid response.</p>
-
-
-            <h3>7.Lowest PWM value speed (once in motion) </h3>
-
+                The figure below is distance measured versus time:
+            </p>
+            <img src="pics/dis.jpg" width="800">
             <p style="text-align: left;padding: 0px 30px;">
-                Similar to the test Lowest PWM value speed in section 4, I gave the robot a initial speed and then let
-                it run on its own.I found that the lowest PWM is 37 for both left and right motors, The video below
-                shows the result:</p>
-            <iframe width="560" height="315" src="https://www.youtube.com/embed/O65JWnuZzoY"
-                    title="YouTube video player" frameborder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                    allowfullscreen></iframe>
+                The figure below is PWM versus time,when it is 300mm away form the wall, it should stop so the pwm is 0:
+            </p>
+            <img src="pics/pwm.jpg" width="800">
+
+
+            <h3>5.WIND-UP IMPLEMENTATION AND DISCUSSION</h3>
+            <p style="text-align: left;padding: 0px 30px;">
+                In PID control, the integrator is responsible for accumulating the error signal over time and producing
+                a corrective output to the system. However, in certain situations, the integrator can
+                increase in the output signal that can cause instability and oscillations in the system.For example,
+                it can make the pwm generated larger than 255, thereforeI set a upper and lower bound for the generated
+                pwm
+            </p>
+
+
         </div>
 
     </div>
