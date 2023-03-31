@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="Lab7" content="">
+    <meta name="Zhiyuan" content="">
+
+    <title>Starter Template for Bootstrap</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <!-- <link href="../../assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet"> -->
+
+    <!-- Custom styles for this template -->
+    <link href="starter-template.css" rel="stylesheet">
+
+    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+    <!--[if lt IE 9]>
+    <script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+    <!-- <script src="../../assets/js/ie-emulation-modes-warning.js"></script> -->
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                    aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">Lab6</a>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+            <ul class="nav navbar-nav">
+                <!--            <li class="index.html"><a href="#">Home</a></li>-->
+                <!--            <li><a href="#intro">Introduction</a></li>-->
+                <!--            <li><a href="#obj">Project Objective</a></li>-->
+                <!--            <li><a href="#design">Procedure and Result</a></li>-->
+                <!--            <li><a href="#drawings">Drawings</a></li>-->
+                <!--            <li><a href="#testing">Testing</a></li>-->
+                <!--            <li><a href="#result">Result</a></li>-->
+            </ul>
+        </div><!--/.nav-collapse -->
+    </div>
+</nav>
+
+<div class="container">
+
+    <div class="starter-template">
+        <h1>Lab 7: Kalman Filter </h1>
+        <h4>Zhiyuan Zhang</h4>
+
+
+    </div>
+
+    <!--      <hr>-->
+    <!--      <div class="center-block">-->
+    <!--          <iframe width="640" height="360" src="https://www.youtube.com/embed/dQw4w9WgXcQ" frameborder="0" allowfullscreen></iframe>-->
+    <!--          <h4 style="text-align:center;">Demonstration Video</h4>-->
+    <!--      </div>-->
+
+    <hr id="intro">
+
+    <div style="text-align:center;">
+        <h2>Introduction</h2>
+        <p style="text-align: left;padding: 0px 30px;">Lab 7 aims to employ a Kalman filter with the goal of
+            accelerating the control loop achieved through PID in Lab 6. </p>
+
+        <hr id='obj'>
+
+        <!--      <div class="row">-->
+        <!--          <div class="col-md-4" style="text-align:center;">-->
+        <!--          <img class="img-rounded" src="pics/1.jpg" alt="Generic placeholder image" width="240" height="240">-->
+        <!--          </div>-->
+        <!--          <div class="col-md-8" style="font-size:18px;">-->
+        <!--          <h2>Project Objective:</h2>-->
+        <!--          <ul>-->
+        <!--              <li>some important objectives.some important objectives.some important objectives.some important objectives.</li>-->
+        <!--                <li>some other important objectives.</li>-->
+        <!--            <li>some not-that-important objectives.</li>-->
+        <!--          </ul>-->
+        <!--          </div>-->
+        <!--      </div>-->
+
+        <!--    <hr id='design'>-->
+
+        <div style="text-align:center;">
+            <h2>Lab Procedure And Result</h2>
+            <h3>1. Estimate Drag and Momentum</h3>
+            <p style="text-align: left;padding: 0px 30px;">
+                To estimate the drag and momentum terms before implementing the Kalman filter, a step response was
+                utilized to calculate the A and B matrices. The step size chosen for this purpose was 100, which is
+                equivalent to the maximum PWM value generated during the PID control in Lab 6. To ensure that the robot
+                had adequate time to reach a steady state, it was initiated at a distance of approximately 4
+                meters.Here is the testing video :
+
+            </p>
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/P6Sn9ptbtSU"
+                    title="YouTube video player" frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowfullscreen></iframe>
+            <p style="text-align: left;padding: 0px 30px;"> It should be noted that the bump observed in the distance
+                vs. time graph is a result of the robot
+                colliding with the wall and rebounding.
+
+            </p>
+            <img src="pics/dis_1.jpg" width="800">
+            <img src="pics/v_1.PNG" width="800">
+            <img src="pics/pwm.PNG" width="800">
+
+            <p style="text-align: left;padding: 0px 30px;">Based on the plots, it can be inferred that the robot
+                achieves a steady state at approximately 4.3 seconds, with a steady state velocity of around 1833 mm/s.
+                The 90% rise time for the system is approximately 1.8 seconds, indicating that x_dot = 1907 and t_90 =
+                3.4. The A ,B Ad and Bd matrix 's calculation are shown below: </p>
+            <img src="pics/dm.PNG" width="800">
+            <img src="pics/CodeCogsEqn.svg" width="800">
+
+            <h3>P/I/D discussion</h3>
+            <p style="text-align: left;padding: 0px 30px;"></p>
+
+
+            <h3>Initialize Kalman Filter and Implementing KF in Jupyter </h3>
+            <p style="text-align: left;padding: 0px 30px;">The image presented in the lecture slides illustrates the
+                operation of the Kalman Filter. In order to utilize the Kalman Filter, several parameters must be
+                specified in the workflow. This includes the matrices A, B, and C, which are required to generate the
+                state space equation, as well as the noise matrices sigma_u and sigma_z.</p>
+            <img src="pics/lecture.PNG" width="800">
+            <p style="text-align: left;padding: 0px 30px;"> The following code is used to initialize the filter and
+                Implement the Filter:</p>
+            <script src="https://gist.github.com/Zhang9340/a665e11e784040a2c34394520c7af56e.js"></script>
+
+            <p style="text-align: left;padding: 0px 30px;">
+                The C matrix has been set to [-1,0] since the TOF sensor measures the distance from the wall as a
+                negative value when the robot is at state 0. Additionally, the state vector x is initialized as the
+                negative value of the initial TOF reading.
+            </p>
+            <p style="text-align: left;padding: 0px 30px;">
+                Then noise covariance matrices are specified. Process noise sigma_u is dependent on sampling rate. The
+                two standard deviations sigma1 and sigma2 reflects the trust in modeled position and speed respectively,
+                and a diagonal matrix is used because we assume they are uncorrelated.The values for sigma and sigma_u
+                were chosen to be the same as those presented in the lecture.
+
+                For sigma_z which represents measurement noise. I choose the sigma_z = 25 to get the best result of the
+                filter
+                The reault of the filter is shown below:
+            </p>
+            <img src="pics/kalm_1.PNG" width="800">
+
+            <h3> Implement the kalman filter on the robot</h3>
+            <p style="text-align: left;padding: 0px 30px;">
+                Once multiple tests were conducted to confirm that the Kalman Filter was functioning as expected in
+                Jupyter, the next step was to integrate the filter into the PID controller used in Lab 6 on the Artemis.
+                This involved adapting the Python code used in Jupyter to C. The PID
+                value remained the same as in Lab 6, but instead of using the detected distance directly to calculate
+                the error, the filtered distance estimate obtained from the Kalman Filter was utilized.
+            </p>
+            <p style="text-align: left;padding: 0px 30px;">
+                The code Implemented on the robot is shown below:
+            </p>
+            <script src="https://gist.github.com/Zhang9340/183779efd53a2a1c11d927e1ec31be37.js"></script>
+
+
+            <p style="text-align: left;padding: 0px 30px;">
+                To implement a Kalman filter in my PID controller, I will calculate the error using the Kalman filter
+                instead of using the TOF data. The change for this lab, which is different from Lab 6, is shown below:
+
+            </p>
+            <img src="pics/change.PNG" width="800">
+
+            <p style="text-align: left;padding: 0px 30px;"> In order to improve the Kalman filter's accuracy, the value
+                of sigma has been recalculated using the real sample rate and adjusted to 31.6. The video below show
+                the robot running the PID with Kalman filter </p>
+
+            </p>
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/GjHo091_E_w"
+                    title="YouTube video player" frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowfullscreen></iframe>
+
+
+            <p style="text-align: left;padding: 0px 30px;">
+                From the plot below, it is evident that the Kalman filter output closely tracks the actual
+                time-of-flight distance, albeit with a slight deviation.
+            </p>
+            <img src="pics/finalkf.PNG" width="800">
+
+
+            <h3></h3>
+            <p style="text-align: left;padding: 0px 30px;">
+
+
+        </div>
+
+    </div>
+
+</div><!-- /.container -->
+
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
+<script src="dist/js/bootstrap.min.js"></script>
+<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+<!-- <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script> -->
+</body>
+</html>
