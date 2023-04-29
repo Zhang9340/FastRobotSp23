@@ -2,11 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <meta name="Lab9" content="">
-    <meta name="Zhiyuan" content="">
+    <meta content="" name="Lab9">
+    <meta content="" name="Zhiyuan">
 
     <title>Starter Template for Bootstrap</title>
 
@@ -36,16 +36,16 @@
 <nav class="navbar navbar-inverse navbar-fixed-top">
     <div class="container">
         <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
-                    aria-expanded="false" aria-controls="navbar">
+            <button aria-controls="navbar" aria-expanded="false" class="navbar-toggle collapsed" data-target="#navbar"
+                    data-toggle="collapse" type="button">
                 <span class="sr-only">Toggle navigation</span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#">Lab9</a>
+            <a class="navbar-brand" href="#">Lab10</a>
         </div>
-        <div id="navbar" class="collapse navbar-collapse">
+        <div class="collapse navbar-collapse" id="navbar">
             <ul class="nav navbar-nav">
                 <!--            <li class="index.html"><a href="#">Home</a></li>-->
                 <!--            <li><a href="#intro">Introduction</a></li>-->
@@ -62,7 +62,7 @@
 <div class="container">
 
     <div class="starter-template">
-        <h1>Lab 9: Mapping </h1>
+        <h1>Lab 10: Grid Localization using Bayes Filter </h1>
         <h4>Zhiyuan Zhang</h4>
 
 
@@ -78,10 +78,9 @@
 
     <div style="text-align:center;">
         <h2>Introduction</h2>
-        <p style="text-align: left;padding: 0px 30px;">In this lab, we'll make a map of a still room that will be used
-            later for localization and navigation tasks. To create the map, put the robot car in a few marked spots
-            around the lab. Have it spin in place while collecting ToF readings. Combine the data from different
-            locations, use transformation matrices to plot points, and draw the map with straight lines. </p>
+        <p style="text-align: left;padding: 0px 30px;">In this lab, we applied the Bayes filter for
+            grid-based localization. Our objective was to simulate a robot navigating a predetermined and preprogrammed
+            path. At each time step, we employed the Bayes filter to ascertain the robot's location (localization). </p>
 
         <hr id='obj'>
 
@@ -103,81 +102,140 @@
 
         <div style="text-align:center;">
             <h2>Lab Procedure And Result</h2>
-            <h3>Angular speed contorl</h3>
+            <h3>Grid in Simulator</h3>
+            <p style="text-align: left;padding: 0px 30px;">In this lab, robot localization refers to determining the
+                robot's state (coordinates and orientation)
+                after each movement. The robot's state in the simulator is defined as a 3D representation with (x, y, θ)
+                coordinates. The robot's environment (grid map) encompasses a continuous space, extending from:</p>
+            <ul>
+                <li>[-1.6764, +1.9812) meters or [-5.5, 6.5) feet in the x-direction.</li>
+                <li>[-1.3716, +1.3716) meters or [-4.5, +4.5) feet in the y-direction.</li>
+                <li>[-180, +180) degrees along the theta axis.</li>
+            </ul>
+            <p>The virtual robot shown in the simulator image starts at the initial state of (0, 0, 0). The X-axis
+                increases from left to right, the Y-axis increases from bottom to top, and the Theta-axis increases when
+                the robot spins clockwise and decreases when it spins counter-clockwise.</p>
+
+            <p style="text-align: left;padding: 0px 30px;"></p>
+
+            <p style="text-align: left;padding: 0px 30px;"></p>
+            <h3>3D Grid</h3>
             <p style="text-align: left;padding: 0px 30px;">
-                In this lab, I used speed control to rotate the robot car at an average of 25 degrees per second. I set
-                up the PID control to maintain the rotation at 25 degrees/second by adjusting the motor speed. The IMU
-                setup was based on a previous lab. Spinning the car slowly was challenging due to friction, battery
-                effects, and imbalances between the left and right motors, which could cause the car not to spin in
-                place. I set the starting speed to 74 and the KP to 0.1. The following code demonstrates the PID
-                control:
+                The grid map is divided into uniformly sized cells. Each grid cell has dimensions of 0.3048 meters along
+                the x and y axes, and 20 degrees along the θ axis. Consequently, the continuous state space is
+                discretized into cells as follows:</p>
+            <p style="text-align: left;padding: 0px 30px;">X-axis cells: [0, 12); with a 0.3048-meter resolution.<br>
+                Y-axis cells: [0, 9); with a 0.3048-meter resolution.<br>
+                Theta-axis cells: [0, 18); with a 20-degree resolution.</p>
             </p>
-            <script src="https://gist.github.com/Zhang9340/4679c16bbd10968f59efa482c3b9484a.js"></script>
-            <p style="text-align: left;padding: 0px 30px;"> And the result of the angular control is shown below: </p>
-            <iframe width="560" height="315" src="https://www.youtube.com/embed/g8d5yi45imk"
+            <img src="pics/3dgrid.jpg" width="800">
+
+            <h3>Bayes Filter Algorithm</h3>
+            <img src="pics/bayes.PNG" width="800">
+            <p style="text-align: left;padding: 0px 30px;">In this lab, the main work is to implement the byes Algorithm
+                above </p>
+            <h3>Implement Compute_Control</h3>
+
+            <p style="text-align: left;padding: 0px 30px;">The First function to implement involves calculating the
+                actual action the robot takes to transition from one state to another (the robot's first movement
+                step).</p>
+            <p style="text-align: left;padding: 0px 30px;">The action can be broken down into three stages, as
+                illustrated below:</p>
+            <ol>
+                <li>The robot must rotate by a specific angle (delta_rot1) to align itself with the next state's
+                    position.
+                </li>
+                <li>Next, it moves (delta_trans) to a new grid cell on the map.</li>
+                <li>Finally, the robot rotates to a new angle (delta_rot2) to arrive at its intended state.</li>
+            </ol>
+            <img src="pics/control_formula.PNG" width="500">
+
+            <p style="text-align: left;padding: 0px 30px;">By employing basic trigonometry, I utilized the inverse
+                tangent and the difference between the current and previous poses along the x and y axes to determine
+                the initial rotation. Subsequently, I applied the Pythagorean theorem and the difference between the
+                current and previous poses along the x and y axes to compute the translation. Lastly, to obtain the
+                third rotation, I subtracted the initial rotation and the previous pose rotation from the current pose
+                and normalized the result. The code for this function is provided below:</p>
+            <script src="https://gist.github.com/Zhang9340/70edd915a1a609e27030675c9c70a02c.js"></script>
+
+            <h3>Odometry Motion Model</h3>
+            <p style="text-align: left;padding: 0px 30px;">This function computes the likelihood of reaching the current
+                state (cur_pose) given a control action (u)
+                and the robot's previous state (prev_pose). In this case, the provided control action (u) may differ
+                from the actual action calculated using the previously defined function, compute_control, which we can
+                refer to as the actual action.</p>
+            <p style="text-align: left;padding: 0px 30px;">To calculate the probability, a Gaussian function is used to
+                model noise, with a mu representing the mean
+                and a sigma representing the standard deviation.The probability can be computed as:</p>
+            <img src="pics/odometry_fun.PNG" width="500">
+            <p style="text-align: left;padding: 0px 30px;">The code below shows implementation of the formulas:</p>
+            <script src="https://gist.github.com/Zhang9340/8800fde259f36b754071c948378198b1.js"></script>
+            <h3>Prediction Step</h3>
+            <p>Subsequently, I developed the prediction_step function, which corresponds to the following components of
+                the Bayes Filter:</p>
+            <img src="pics/prediction.png" width="500">
+            <p style="text-align: left;padding: 0px 30px;">The code below shows implementation of the formulas:</p>
+            <script src="https://gist.github.com/Zhang9340/313851bcaf005623768c002e2d258d52.js"></script>
+            <h3>Sensor Model</h3>
+            <img src="pics/sensor.PNG" width="500">
+            <p style="text-align: left;padding: 0px 30px;">This function calculates the probability of accurate sensor
+                distance measurements given the current
+                state.
+                As with the previous example, the probability is derived using a Gaussian function. The function needs
+                an input, 'obs', which contains the true (accurate) distance measurements for a state. The
+                sensor-measured distances can be accessed by calling the 'loc.obs_range_data' variable. Consequently,
+                the probabilities for each of the 18 sensor measurements can be computed and stored in a single
+                array.</p>
+            <script src="https://gist.github.com/Zhang9340/34da49b8cb14f22b048ebf5c4d2c188c.js"></script>
+            <h3>Update Step</h3>
+            <img src="pics/update.png" width="500">
+
+            <p style="text-align: left;padding: 0px 30px;">This function primarily updates the 'bel' matrix with the
+                probability distribution representing the
+                robot's estimated location based on sensor measurements and 'bel_bar'. To achieve this, I employed three
+                nested for loops, one for each dimension. Within the innermost loop, I essentially translated line 3 of
+                the Bayes Filter into Python code. Lastly, I normalized the results. The code for this function is
+                provided below:</p>
+            <script src="https://gist.github.com/Zhang9340/7e2cd3144099fce6f5066a85a62339e5.js"></script>
+            <h3>Result of Bayes Filter Implementation</h3>
+
+            <p style="text-align: left;padding: 0px 30px;">With the Bayes Filter fully developed, it's now time to
+                implement and assess its performance. In the video below, the "Trajectory Plotter" displays three lines
+                with distinct colors as the robot moves:</p>
+            <ol>
+                <li>The green line illustrates a pre-programmed trajectory used as the ground truth to test the Bayes
+                    Filter.
+                </li>
+                <li>The red line signifies odometry readings, which are the noisiest and least accurate.</li>
+                <li>The blue line represents the belief calculated by the implemented Bayes Filter algorithm, which
+                    closely aligns with the ground truth line.
+                </li>
+                <iframe width="560" height="315" src="https://www.youtube.com/embed/E2SfR2PdsRA"
+                        title="YouTube video player" frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        allowfullscreen></iframe>
+            </ol>
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/WPxwnKn_8JA"
                     title="YouTube video player" frameborder="0"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                     allowfullscreen></iframe>
-            <p style="text-align: left;padding: 0px 30px;">In the video, my car can be seen moving slowly on its axis,
-                although it appears somewhat unstable. I set angular speed
-                was 25 degrees per second. The measured speed was somewhat inconsistent, the average was around 12
-                degrees. The motor speed changed slightly, ranging from 74 to 80,suggesting that the car motor was
-                stable. The instability was likely due to varying friction between the tiles and wheels. The total time
-                to spin 360 degrees was about 20 seconds, which means the average angular speed was close to 12 degrees
-                per second. </p>
-            <h3>Mapping result</h3>
-            <p style="text-align: left;padding: 0px 30px;">
-                The Mapping reuslt is shown below:
-            </p>
-            <p style="text-align: left;padding: 0px 30px;">
-                Result of (0,0):
-            </p>
-            <img src="pics/（0，0）.PNG" width="800">
 
-            <p style="text-align: left;padding: 0px 30px;">
-                Result of (0，3):
-            </p>
-            <img src="pics/（0，3）.PNG" width="800">
-
-            <p style="text-align: left;padding: 0px 30px;">
-                Result of (5，3):
-            </p>
-            <img src="pics/（5，3）.PNG" width="800">
-            <p style="text-align: left;padding: 0px 30px;">
-                Result of (5，-3):
-            </p>
-            <img src="pics/（5，-3）.PNG" width="800">
-            <img src="pics/（5，3）.PNG" width="800">
-            <p style="text-align: left;padding: 0px 30px;">
-                Result of (-3，-2):
-            </p>
-            <img src="pics/-3.PNG" width="800">
+            <p>It is evident that the blue line (belief) closely aligns with the green line (ground truth), while the
+                odom falls significantly short in accuracy. In the second video featuring white boxes, a whiter box
+                indicates a higher probability of movement.</p>
+            <script src="https://gist.github.com/Zhang9340/3484532496b469a73844bf36262d26f4.js"></script>
         </div>
 
-
-        <p style="text-align: left;padding: 0px 30px;">
-            After transfer the reading from the different position using transformation metrics , the mapping I get is
-            shown below:
-        </p>
-        <img src="pics/map1.PNG" width="800">
-        <p style="text-align: left;padding: 0px 30px;">
-            After transfer the reading from the different position using transformation metrics , the mapping I get is
-            shown below:
-        </p>
-        <img src="pics/map2.PNG" width="800">
-
-    </div>
-
-</div><!-- /.container -->
+    </div><!-- /.container -->
 
 
-<!-- Bootstrap core JavaScript
-================================================== -->
-<!-- Placed at the end of the document so the pages load faster -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-<script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
-<script src="dist/js/bootstrap.min.js"></script>
-<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-<!-- <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script> -->
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
+    <script src="dist/js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <!-- <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script> -->
 </body>
 </html>
