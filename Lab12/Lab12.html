@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta content="" name="Lab12">
+    <meta content="" name="Zhiyuan">
+
+    <title>Starter Template for Bootstrap</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <!-- <link href="../../assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet"> -->
+
+    <!-- Custom styles for this template -->
+    <link href="starter-template.css" rel="stylesheet">
+
+    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+    <!--[if lt IE 9]>
+    <script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+    <!-- <script src="../../assets/js/ie-emulation-modes-warning.js"></script> -->
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button aria-controls="navbar" aria-expanded="false" class="navbar-toggle collapsed" data-target="#navbar"
+                    data-toggle="collapse" type="button">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">Lab10</a>
+        </div>
+        <div class="collapse navbar-collapse" id="navbar">
+            <ul class="nav navbar-nav">
+                <!--            <li class="index.html"><a href="#">Home</a></li>-->
+                <!--            <li><a href="#intro">Introduction</a></li>-->
+                <!--            <li><a href="#obj">Project Objective</a></li>-->
+                <!--            <li><a href="#design">Procedure and Result</a></li>-->
+                <!--            <li><a href="#drawings">Drawings</a></li>-->
+                <!--            <li><a href="#testing">Testing</a></li>-->
+                <!--            <li><a href="#result">Result</a></li>-->
+            </ul>
+        </div><!--/.nav-collapse -->
+    </div>
+</nav>
+
+<div class="container">
+
+    <div class="starter-template">
+        <h1>Lab 12: Path Planning and Execution. </h1>
+        <h4>Zhiyuan Zhang</h4>
+
+
+    </div>
+
+    <!--      <hr>-->
+    <!--      <div class="center-block">-->
+    <!--          <iframe width="640" height="360" src="https://www.youtube.com/embed/dQw4w9WgXcQ" frameborder="0" allowfullscreen></iframe>-->
+    <!--          <h4 style="text-align:center;">Demonstration Video</h4>-->
+    <!--      </div>-->
+
+    <hr id="intro">
+
+    <div style="text-align:center;">
+        <h2>Introduction</h2>
+        <p style="text-align: left;padding: 0px 30px;">In this lab, I collaborated with
+            WeiZhe Zhao to guide the robot to navigate swiftly and accurately through a predefined sequence of waypoints
+            within the stipulated environment. The designated waypoints outlining the car's route on the map are
+            enumerated below: </p>
+        <img src="pics/waypoint.jpg" width="800">
+        <hr id='obj'>
+
+        <!--      <div class="row">-->
+        <!--          <div class="col-md-4" style="text-align:center;">-->
+        <!--          <img class="img-rounded" src="pics/1.jpg" alt="Generic placeholder image" width="240" height="240">-->
+        <!--          </div>-->
+        <!--          <div class="col-md-8" style="font-size:18px;">-->
+        <!--          <h2>Project Objective:</h2>-->
+        <!--          <ul>-->
+        <!--              <li>some important objectives.some important objectives.some important objectives.some important objectives.</li>-->
+        <!--                <li>some other important objectives.</li>-->
+        <!--            <li>some not-that-important objectives.</li>-->
+        <!--          </ul>-->
+        <!--          </div>-->
+        <!--      </div>-->
+
+        <!--    <hr id='design'>-->
+
+        <div style="text-align:center;">
+            <h2>Lab Procedure And Result</h2>
+            <h3></h3>
+            <p style="text-align: left;padding: 0px 30px;">Given the constraints of time during the finals,
+                I opted to configure my robot to adhere to a pre-set series of steps using PID Control for
+                both location and orientation, as specified below. Insights from the previous lab revealed that the Time
+                of Flight (TOF) sensor is not optimal for long distances. As a result, we resolved to guide the robot in
+                a reverse direction from point 2 to point 4, and from point 10 to 11, thus facilitating more accurate
+                readings from the TOF sensor. Additionally, making the robot move in reverse minimizes the likelihood of
+                the TOF sensor mistakenly measuring the distance from the box instead of the wall.</p>
+            <img src="pics/plan.jpg" width="800">
+            <p style="text-align: left;padding: 0px 30px;"> we run the pre-defined step in the notebook by sending the
+                corresponding command in order:
+
+            </p>
+            <script src="https://gist.github.com/Zhang9340/cf84b7fc914ef15c454cb3b5b48f555f.js"></script>
+            <p style="text-align: left;padding: 0px 30px;"> The command sent to the robot contains includes PID values
+                and either the target distance or degree. These target distances are premeasured at each point, while
+                the target degree corresponds to the degrees specified in the diagram provided earlier.
+            </p>
+            <p style="text-align: left;padding: 0px 30px;">For the PID control for the orientation and postion , The
+                code used is from previous lab and the code is shown below :</p>
+            <script src="https://gist.github.com/Zhang9340/68a383cfbe1a04e1607fc4820e02f7c3.js"></script>
+            <script src="https://gist.github.com/Zhang9340/a6b86c34708713034b5def16aa513957.js"></script>
+            <p style="text-align: left;padding: 0px 30px;"></p>
+            <h3>Result</h3>
+            <p style="text-align: left;padding: 0px 30px;"> After implementing the code, we run the robot few times and
+                found that the PID orientation was not stable and might turn more than expected and lead to the failure
+                of subsequence point , we therefore modify some of the target degree. Finally , the robot run quite
+                well: </p>
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/2IK-8vK15cU"
+                    title="YouTube video player" frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowfullscreen></iframe>
+
+
+        </div>
+
+    </div><!-- /.container -->
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
+    <script src="dist/js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <!-- <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script> -->
+</body>
+</html>
